@@ -73,7 +73,7 @@ export default function SocialShare() {
         link.click();
         document.body.removeChild(link)
         window.URL.revokeObjectURL(url)
-        document.body.removeChild(link)
+        document.body.removeChild(link);
       })
     }
 
@@ -81,6 +81,10 @@ export default function SocialShare() {
       <div className="container mx-auto p-4 max-w-4xl">
         <h1 className="text-3xl font-bold mb-6 text-center">
           Social Media Image Creator
+          
+        </h1>
+        <h1 className='text-center font-serif text-red-400'>
+          image bnao chhaa jao 
         </h1>
 
         <div className="card">
@@ -105,7 +109,7 @@ export default function SocialShare() {
 
             {uploadedImage && (
               <div className="mt-6">
-                <h2 className="card-title mb-4">Select Social Media Format</h2>
+                <h2 className="card-title mb-4">Image bnao chaa jao</h2>
                 <div className="form-control">
                   <select
                     className="select select-bordered w-full"
