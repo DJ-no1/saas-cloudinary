@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect, useCallback } from 'react'
 import { getCldImageUrl, getCldVideoUrl } from "next-cloudinary"
 import { Download, Clock, FileDown, FileUp } from "lucide-react";
@@ -17,7 +14,6 @@ interface VideoCardProps {
 }
 
 const VideoCard: React.FC<VideoCardProps> = ({ video, onDownload }) => {
-    
     const [isHovered, setIsHovered] = useState(false)
     const [previewError, setPreviewError] = useState(false)
 

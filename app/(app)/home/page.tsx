@@ -60,7 +60,7 @@ function Home() {
               {
                 videos.map((video) => (
                     <VideoCard
-                        key={video.publicId}
+                        key={video.id}
                         video={video}
                         onDownload={handleDownload}
                     />
