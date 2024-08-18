@@ -63,7 +63,9 @@ export async function POST(request: NextRequest) {
                         folder: "video-uploads",
                         transformation: [
                             {
-                                quality: "auto", fetch_format: "mp4"
+                                quality: "auto", 
+                                
+                                fetch_format: "mp4"
                             }
                         ]
                     },
