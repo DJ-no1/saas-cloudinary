@@ -3,6 +3,8 @@ import React, {useState, useEffect, useCallback} from 'react'
 import axios from 'axios'
 import VideoCard from '@/components/VideoCard'
 import { Video } from '@/types'
+
+
 function Home() {
     const [videos, setVideos] = useState<Video[]>([])
     const [loading, setLoading] = useState(true)
@@ -28,7 +30,8 @@ function Home() {
 
     useEffect(() => {
         fetchVideos()
-    }, [fetchVideos])
+    }, [fetchVideos]
+  )
 
     const handleDownload = useCallback((url: string, title: string) => {
         () => {
