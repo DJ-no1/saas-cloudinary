@@ -78,6 +78,7 @@ export default function AppLayout({
                           user.username || user.emailAddresses[0].emailAddress
                         }
                       />
+                      
                     </div>
                   </div>
                   <span className="text-sm truncate max-w-xs lg:max-w-md">
