@@ -42,12 +42,13 @@ export default function VideoUpload() {
       const response = await axios.post('/api/video-upload', formData)
       // check for 200 response
       router.push('/home')
+    
+//       if (response.status === 200) {
+//         alert('Video uploaded successfully')
+// } else {
+//         alert('Something went wrong')
+// }
 
-      if (response.status === 200) {
-              alert('Video uploaded successfully')
-      } else {
-              alert('Something went wrong')
-      }
     } catch (error) {
       console.log('erron on uploading file axios tryCatch', error)
     } finally {
