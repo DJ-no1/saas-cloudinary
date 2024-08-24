@@ -20,8 +20,8 @@ export default function VideoUpload() {
 
     e.preventDefault()
 
-    if (!file || !title || !description) {
-      alert('Please fill all the fields')
+    if (!file || !title) {
+      alert('Please fill Title')
       return
     }
 
