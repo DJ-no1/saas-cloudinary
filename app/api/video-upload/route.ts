@@ -2,49 +2,40 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 import { auth } from '@clerk/nextjs/server';
-import { PrismaClient } from '@prisma/client';
-
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // Configuration
 cloudinary.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET 
-    
-    // Click 'View Credentials' below to copy your API secret
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 interface CloudinaryUploadResult {
     public_id: string;
     bytes: number;
     duration?: number;
-    [key: string]: any
+    [key: string]: any;
 }
 
 export async function POST(request: NextRequest) {
-     const { userId } = auth()
-
+    const { userId } = auth();
 
     try {
-
-        //check user
-        // if (!userId) {
-        //     return NextResponse.json({error: "Unauthorized"}, {status: 401})
-        // }
+        // Check Cloudinary configuration
         if (
             !process.env.CLOUDINARY_API_KEY ||
             !process.env.CLOUDINARY_API_SECRET ||
             !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
         ) {
-            return NextResponse.json({ error: "Cloudinary not configured" }, { status: 500 })
+            return NextResponse.json({ error: "Cloudinary not configured" }, { status: 500 });
         }
+
         const formData = await request.formData();
         const file = formData.get("file") as File | null;
-        const title = formData.get("title") as string
-        const discription = formData.get("discription") as string
-        const originalSize = formData.get("originalSize") as string
+        const title = formData.get("title") as string;
+        const description = formData.get("description") as string;
+        const originalSize = formData.get("originalSize") as string;
 
 
 
@@ -80,8 +71,8 @@ export async function POST(request: NextRequest) {
         )
         const video = await prisma.video.create({
             data: {
-              title,
-                 description: discription,
+                title,
+                description: description,
                 originalSize: originalSize,
                 compressedSize: String(result.bytes),
                 publicId: result.public_id,
@@ -89,14 +80,10 @@ export async function POST(request: NextRequest) {
             }
         })
 
-        return NextResponse.json(video)
+        return NextResponse.json(video);
 
     } catch (error) {
-        console.log("UPload video failed", error)
-        return NextResponse.json({ error: "Upload vvv failed" }, { status: 500 })
+        console.error("Upload video failed", error);
+        return NextResponse.json({ error: "Upload failed" }, { status: 500 });
     }
-    finally {
-        await prisma.$disconnect()
-    }
-
 }

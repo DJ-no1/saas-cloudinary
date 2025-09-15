@@ -6,12 +6,12 @@ import { Video } from '@/types'
 import { VideoIcon, RefreshCw } from 'lucide-react'
 
 function Home() {
-    const [videos, setVideos] = useState<Video[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-    const [downloadStatus, setDownloadStatus] = useState<string | null>(null)
+  const [videos, setVideos] = useState<Video[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [downloadStatus, setDownloadStatus] = useState<string | null>(null)
 
-    const fetchVideos = useCallback(async () => {
+  const fetchVideos = useCallback(async () => {
     try {
       setLoading(true)
       const response = await axios.get("/api/videos")
@@ -32,73 +32,73 @@ function Home() {
     fetchVideos()
   }, [fetchVideos])
 
-    const handleDownload = useCallback(async (url: string, title: string) => {
-        try {
-            setDownloadStatus("Preparing download...")
-            
-            // Try to fetch the video as a blob first
-            try {
-                const response = await fetch(url, {
-                    mode: 'cors',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
-                setDownloadStatus("Downloading...")
-                const blob = await response.blob();
-                
-                // Create a temporary URL for the blob
-                const blobUrl = window.URL.createObjectURL(blob);
-                
-                // Create and trigger download
-                const link = document.createElement("a");
-                link.href = blobUrl;
-                link.setAttribute("download", `${title}.mp4`);
-                document.body.appendChild(link);
-                link.click();
-                
-                // Cleanup
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(blobUrl);
-                
-                setDownloadStatus("Download completed!")
-                setTimeout(() => setDownloadStatus(null), 3000);
-                
-            } catch (fetchError) {
-                // If fetch fails due to CORS or other issues, use fallback method
-                console.log('Fetch failed, using fallback:', fetchError);
-                setDownloadStatus("Using browser download...")
-                
-                // Force download using direct link
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute("download", `${title}.mp4`);
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                setDownloadStatus("Download initiated!")
-                setTimeout(() => setDownloadStatus(null), 3000);
-            }
-            
-        } catch (error) {
-            console.error('Download failed:', error);
-            setDownloadStatus("Download failed, opening video...")
-            
-            // Last fallback - open in new tab
-            window.open(url, '_blank');
-            
-            setTimeout(() => setDownloadStatus(null), 3000);
-        }
-    }, [])
+  const handleDownload = useCallback(async (url: string, title: string) => {
+    try {
+      setDownloadStatus("Preparing download...")
 
-    if (loading) {
+      // Try to fetch the video as a blob first
+      try {
+        const response = await fetch(url, {
+          mode: 'cors',
+          headers: {
+            'Cache-Control': 'no-cache',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        setDownloadStatus("Downloading...")
+        const blob = await response.blob();
+
+        // Create a temporary URL for the blob
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Create and trigger download
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.setAttribute("download", `${title}.mp4`);
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+
+        setDownloadStatus("Download completed!")
+        setTimeout(() => setDownloadStatus(null), 3000);
+
+      } catch (fetchError) {
+        // If fetch fails due to CORS or other issues, use fallback method
+        console.log('Fetch failed, using fallback:', fetchError);
+        setDownloadStatus("Using browser download...")
+
+        // Force download using direct link
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${title}.mp4`);
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setDownloadStatus("Download initiated!")
+        setTimeout(() => setDownloadStatus(null), 3000);
+      }
+
+    } catch (error) {
+      console.error('Download failed:', error);
+      setDownloadStatus("Download failed, opening video...")
+
+      // Last fallback - open in new tab
+      window.open(url, '_blank');
+
+      setTimeout(() => setDownloadStatus(null), 3000);
+    }
+  }, [])
+
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center">
@@ -130,10 +130,9 @@ function Home() {
     <div className="max-w-7xl mx-auto p-6">
       {/* Download Status Toast */}
       {downloadStatus && (
-        <div className={`alert mb-6 ${
-          downloadStatus.includes('completed') ? 'alert-success' : 
-          downloadStatus.includes('failed') ? 'alert-error' : 'alert-info'
-        }`}>
+        <div className={`alert mb-6 ${downloadStatus.includes('completed') ? 'alert-success' :
+            downloadStatus.includes('failed') ? 'alert-error' : 'alert-info'
+          }`}>
           <div className="flex items-center space-x-2">
             {downloadStatus.includes('completed') ? (
               <span>✅</span>
@@ -146,7 +145,7 @@ function Home() {
           </div>
         </div>
       )}
-      
+
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-3">
           <div className="bg-primary/10 p-3 rounded-lg">
