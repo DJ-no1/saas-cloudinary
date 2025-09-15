@@ -12,12 +12,14 @@ import {
   Share2Icon,
   UploadIcon,
   ImageIcon,
+  BookOpenIcon,
 } from "lucide-react";
 
 const sidebarItems = [
   { href: "/home", icon: LayoutDashboardIcon, label: "Home Page" },
   { href: "/social-share", icon: Share2Icon, label: "Social Share" },
-  { href: "video-upload", icon: UploadIcon, label: "Video Upload" },
+  { href: "/video-upload", icon: UploadIcon, label: "Video Upload" },
+  { href: "/doc", icon: BookOpenIcon, label: "Documentation" },
 ];
 
 export default function AppLayout({
@@ -62,8 +64,8 @@ export default function AppLayout({
             </div>
             <div className="flex-1">
               <Link href="/" onClick={handleLogoClick}>
-                <div className="btn btn-ghost normal-case text-2xl font-bold tracking-tight cursor-pointer  ">
-                  Om bhat suaha
+                <div className="btn btn-ghost normal-case text-2xl font-bold tracking-tight cursor-pointer">
+                  CloudVid Pro
                 </div>
               </Link>
             </div>
@@ -78,7 +80,7 @@ export default function AppLayout({
                           user.username || user.emailAddresses[0].emailAddress
                         }
                       />
-                      
+
                     </div>
                   </div>
                   <span className="text-sm truncate max-w-xs lg:max-w-md">
@@ -113,11 +115,10 @@ export default function AppLayout({
               <li key={item.href} className="mb-2">
                 <Link
                   href={item.href}
-                  className={`flex items-center space-x-4 px-4 py-2 rounded-lg ${
-                    pathname === item.href
+                  className={`flex items-center space-x-4 px-4 py-2 rounded-lg ${pathname === item.href
                       ? "bg-primary text-white"
                       : "hover:bg-base-300"
-                  }`}
+                    }`}
                   onClick={() => setSidebarOpen(false)}
                 >
                   <item.icon className="w-6 h-6" />

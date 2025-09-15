@@ -10,12 +10,13 @@ dayjs.extend(realtiveTime)
 
 interface VideoCardProps {
     video: Video;
-    onDownload: (url: string, title: string) => void;
+    onDownload: (url: string, title: string) => Promise<void>;
 }
 
 const VideoCard: React.FC<VideoCardProps> = ({ video, onDownload }) => {
     const [isHovered, setIsHovered] = useState(false)
     const [previewError, setPreviewError] = useState(false)
+    const [isDownloading, setIsDownloading] = useState(false)
 
     const getThumbnailUrl = useCallback((publicId: string) => {
         return getCldImageUrl({
@@ -35,7 +36,8 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDownload }) => {
             src: publicId,
             width: 1920,
             height: 1080,
-
+            format: "mp4",
+            quality: "auto"
         })
     }, [])
 
@@ -136,12 +138,22 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDownload }) => {
                         <span className="text-accent">{compressionPercentage}%</span>
                     </div>
                     <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() =>
-                            onDownload(getFullVideoUrl(video.publicId), video.title)
-                        }
+                        className={`btn btn-primary btn-sm ${isDownloading ? 'loading' : ''}`}
+                        onClick={async () => {
+                            setIsDownloading(true)
+                            try {
+                                await onDownload(getFullVideoUrl(video.publicId), video.title)
+                            } finally {
+                                setIsDownloading(false)
+                            }
+                        }}
+                        disabled={isDownloading}
                     >
-                        <Download size={16} />
+                        {isDownloading ? (
+                            <span className="loading loading-spinner loading-sm"></span>
+                        ) : (
+                            <Download size={16} />
+                        )}
                     </button>
                 </div>
             </div>
