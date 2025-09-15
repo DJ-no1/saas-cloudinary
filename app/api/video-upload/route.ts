@@ -19,9 +19,8 @@ interface CloudinaryUploadResult {
 }
 
 export async function POST(request: NextRequest) {
-    const { userId } = auth();
-
     try {
+        const { userId } = auth();
         // Check Cloudinary configuration
         if (
             !process.env.CLOUDINARY_API_KEY ||
@@ -40,11 +39,11 @@ export async function POST(request: NextRequest) {
 
 
         if (!file) {
-            return NextResponse.json({ error: "File not found" }, { status: 400 })
+            return NextResponse.json({ error: "File not found" }, { status: 400 });
         }
 
-        const bytes = await file.arrayBuffer()
-        const buffer = Buffer.from(bytes)
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
 
         const result = await new Promise<CloudinaryUploadResult>(
             (resolve, reject) => {
@@ -54,8 +53,7 @@ export async function POST(request: NextRequest) {
                         folder: "video-uploads",
                         transformation: [
                             {
-                                quality: "auto", 
-                                
+                                quality: "auto",
                                 fetch_format: "mp4"
                             }
                         ]
@@ -65,10 +63,11 @@ export async function POST(request: NextRequest) {
                         if (error) reject(error);
                         else resolve(result as CloudinaryUploadResult);
                     }
-                )
-                uploadStream.end(buffer)
+                );
+                uploadStream.end(buffer);
             }
-        )
+        );
+
         const video = await prisma.video.create({
             data: {
                 title,
@@ -78,7 +77,7 @@ export async function POST(request: NextRequest) {
                 publicId: result.public_id,
                 duration: result.duration || 0
             }
-        })
+        });
 
         return NextResponse.json(video);
 
